@@ -51,14 +51,14 @@
   function createCharacter() {
     const el = document.createElement("div");
     el.className = "character pop";
-    el.innerHTML = `
-      <div class="hair"></div>
-      <div class="face">
-        <span class="eye left"></span><span class="eye right"></span>
-        <span class="blush left"></span><span class="blush right"></span>
-        <span class="mouth happy"></span>
-      </div>
-    `;
+
+    // 参考画像そのものをゲーム中のキャラクターとして使用。
+    const img = document.createElement("img");
+    img.src = "/static/character-normal.png";
+    img.alt = "";
+    img.draggable = false;
+
+    el.appendChild(img);
     return el;
   }
 
@@ -109,16 +109,17 @@
     houses[nextIndex].appendChild(char);
 
     // 少しだけ出現時間に揺らぎを持たせる
-    const visibleFor = 520 + Math.random() * 420;
+    // 出現後にしっかり叩けるよう、表示時間を約1.2〜1.9秒に設定。
+    const visibleFor = 1200 + Math.random() * 700;
     popTimer = window.setTimeout(() => {
       if (!gameRunning || activeHouseIndex !== nextIndex) return;
       const current = houses[nextIndex].querySelector(".character");
       if (current) {
-        current.style.animation = "popIn .16s ease-in forwards";
+        current.style.animation = "popIn .32s ease-in forwards";
         window.setTimeout(() => {
           if (activeHouseIndex === nextIndex) activeHouseIndex = -1;
           current.remove();
-        }, 150);
+        }, 320);
       }
     }, visibleFor);
   }
